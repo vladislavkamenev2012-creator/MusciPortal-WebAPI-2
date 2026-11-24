@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = Localizer["Admin"];
+
+    // Строки интерфейса для JavaScript (локализация uk/en остаётся серверной)
+    var keys = new[]
+    {
+        "TabUsers", "TabArtists", "TabGenres", "Username", "Password", "Role", "Status", "Actions",
+        "Active", "PendingApproval", "Approve", "Delete", "Add", "Edit", "Save", "Cancel", "Name",
+        "NewUser", "EditUser", "NewArtist", "EditArtist", "NewGenreTitle", "EditGenre",
+        "PasswordKeepHint", "ApprovedCheck", "ConfirmDeleteUser", "ConfirmDeleteArtist",
+        "ConfirmDeleteGenre", "Loading", "NoData", "MsgSaved", "MsgDeleted",
+        "ErrSession", "ErrGeneric", "ErrNotFound"
+    };
+    var i18n = keys.ToDictionary(k => k, k => Localizer[k].Value);
+}
+
+<h2>⚙️ @Localizer["Admin"]</h2>
+
+<ul class="nav nav-tabs mb-3" id="spa-tabs">
+    <li class="nav-item"><a class="nav-link" href="#users" data-route="users">@Localizer["TabUsers"]</a></li>
+    <li class="nav-item"><a class="nav-link" href="#artists" data-route="artists">@Localizer["TabArtists"]</a></li>
+    <li class="nav-item"><a class="nav-link" href="#genres" data-route="genres">@Localizer["TabGenres"]</a></li>
+</ul>
+
+<div id="spa-alerts"></div>
+
+<!-- Сюда JavaScript рисует заголовок раздела и таблицу -->
+<div id="spa-view"></div>
+
+<!-- Универсальное модальное окно для добавления / редактирования -->
+<div class="modal fade" id="entity-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="entity-form" novalidate>
+            <div class="modal-header">
+                <h5 class="modal-title" id="entity-modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="entity-modal-body"></div>
+            <div class="modal-footer">
+                <div class="text-danger me-auto small" id="entity-modal-error"></div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary" id="entity-modal-save">@Localizer["Save"]</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        window.ADMIN_I18N = @Html.Raw(Json.Serialize(i18n));
+    </script>
+    <script src="~/js/admin-spa.js" asp-append-version="true"></script>
+}
